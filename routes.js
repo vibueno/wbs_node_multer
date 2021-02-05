@@ -20,7 +20,16 @@ const storage = multer.diskStorage({
     );
   },
 });
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    const allowedFiletypes = [".png", ".jpg", ".jpeg", ".gif"];
+
+    if (!allowedFiletypes.includes(path.extname(file.originalname)))
+      return cb(new Error("Only images allowed"));
+    else cb(null, true);
+  },
+});
 
 router.post(
   "/upload-profile-pic",
