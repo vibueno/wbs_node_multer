@@ -12,7 +12,9 @@
     >
       <div>
         <label>Select your profile picture:</label>
-        <input type="file" name="profile_pic" />
+        <!--Aria says an id is needed if you want to pass the file through
+        middlewares-->
+        <input id="profile_pic" type="file" name="profile_pic" />
       </div>
       <div>
         <input type="submit" value="Upload" />
