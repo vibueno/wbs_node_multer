@@ -1,10 +1,15 @@
 const express = require("express");
 const path = require("path");
+const upload = require("./multer");
 
 const router = express.Router();
 const controllers = require("./controllers");
 
-router.post("/upload-profile-pic", controllers.uploadProfilePic);
+router.post(
+  "/upload-profile-pic",
+  upload.single("profile_pic"),
+  controllers.uploadProfilePicAfter
+);
 
 router.get("/", function (req, res) {
   res.sendFile(path.join(__dirname + "/index.html"));
