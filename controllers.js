@@ -1,6 +1,10 @@
+const upload = require("./multer");
+
 const profileController = {
   uploadProfilePic: (req, res) => {
-    res.send("Your file has been uploaded");
+    upload.single("profile_pic")(req, res, () => {
+      res.send("Your file has been uploaded");
+    });
   },
 };
 
