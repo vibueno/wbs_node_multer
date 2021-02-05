@@ -2,32 +2,18 @@
 
 const dotenv = require("dotenv");
 dotenv.config();
+const { PORT } = process.env;
 
 // Express config
 
-const { PORT } = process.env;
 const express = require("express");
 const app = express();
 
 const bodyParser = require("body-parser");
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-//Multer config
-
-const multer = require("multer");
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "/tmp/my-uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + "-" + Date.now());
-  },
-});
-
-const upload = multer({ storage: storage });
+const routes = require("./routes");
+app.use("/", routes);
 
 //Start server
 
