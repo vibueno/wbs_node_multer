@@ -1,7 +1,6 @@
 const runQuery = require("./db.js");
-const buildResponse = require("./utils/response.js");
 
-const getAllSQL = `SELECT * FROM pictures`;
+const insertPictureSQL = "INSERT INTO pictures (originalname, name) VALUES ";
 
 const pictureController = {
   uploadPicsAfter: async (req, res) => {
@@ -23,8 +22,18 @@ const pictureController = {
     } else if (!req.file)
       return res.status(400).send("Select a file before uploading.");
 
-    if (req.file)
+    if (req.file) {
+      const querySQL = insertPictureSQL + "($1,$2);";
+
+      const query = {
+        text: querySQL,
+        values: [req.file.filename, req.file.originalname],
+      };
+
+      const data = await db.query(query);
+
       response = `<div>You have uploaded this picture:</div> <img src=${req.file.filename} />`;
+    }
 
     if (req.files)
       response = `<div>You have uploaded these pictures:</div> ${req.files.map(
