@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage,
   fileFilter: (req, file, cb) => {
-    const allowedFiletypes = [".png", ".jpg", ".jpeg", ".gif"];
+    const allowedFiletypes = [".png", ".jpg", ".jpeg", ".gif", ".webp"];
 
     if (!allowedFiletypes.includes(path.extname(file.originalname))) {
       req.badExtension = true;

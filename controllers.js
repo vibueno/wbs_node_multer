@@ -1,5 +1,10 @@
+const runQuery = require("./db.js");
+const buildResponse = require("./utils/response.js");
+
+const getAllSQL = `SELECT * FROM pictures`;
+
 const pictureController = {
-  uploadPicsAfter: (req, res) => {
+  uploadPicsAfter: async (req, res) => {
     let response;
 
     if (req.badExtension)
