@@ -5,7 +5,9 @@ const profileController = {
 
     if (!req.file)
       return res.status(400).send("Select a file before uploading");
-    else res.send("Your file has been uploaded");
+
+    const response = `<div>You have uploaded this picture:</div> <img src=${req.file.filename} />`;
+    res.send(response);
   },
 };
 
