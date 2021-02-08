@@ -1,9 +1,9 @@
 const runQuery = require("./db.js");
 
-const insertPictureSQL = "INSERT INTO pictures (originalname, name) VALUES ";
-
 const pictureController = {
   uploadPicsAfter: async (req, res) => {
+    const insertPictureSQL =
+      "INSERT INTO pictures (name, originalname) VALUES ";
     let response;
 
     if (req.badExtension)
@@ -31,18 +31,34 @@ const pictureController = {
       };
 
       const data = await db.query(query);
-
       response = `<div>You have uploaded this picture:</div> <img src=${req.file.filename} />`;
     }
 
-    if (req.files)
-      response = `<div>You have uploaded these pictures:</div> ${req.files.map(
-        (file) => {
-          return `<img src="${file.filename}" />`;
-        }
-      )}`;
+    if (req.files) {
+      response = "<div>You have uploaded these pictures:</div>";
+      let querySQL = insertPictureSQL;
+      let values = [];
 
-    res.send(response);
+      req.files.forEach((file, index) => {
+        response += `<img src="${file.filename}" />`;
+        querySQL += `(${"$" + (2 * index + 1) + "::text"},${
+          "$" + (2 * index + 2) + "::text"
+        }),`;
+        values.push(file.filename);
+        values.push(file.originalname);
+      });
+
+      querySQL = querySQL.slice(0, -1);
+      querySQL += ";";
+
+      const query = {
+        text: querySQL,
+        values: values,
+      };
+
+      const data = await db.query(query);
+    }
+    return res.status(200).send(response);
   },
 };
 
