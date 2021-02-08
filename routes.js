@@ -8,7 +8,13 @@ const controllers = require("./controllers");
 router.post(
   "/upload-profile-pic",
   upload.single("profile_pic"),
-  controllers.uploadProfilePicAfter
+  controllers.uploadPicsAfter
+);
+
+router.post(
+  "/upload-cat-pics",
+  upload.array("cat_pics"),
+  controllers.uploadPicsAfter
 );
 
 router.get("/", (req, res) => {
