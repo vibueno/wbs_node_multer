@@ -3,10 +3,20 @@ const pictureController = {
     let response;
 
     if (req.badExtension)
-      return res.status(400).send("File extension not allowed");
+      return res
+        .status(400)
+        .send(
+          "One of the files you tried to upload has an extension that is not allowed. All other files have been uploaded."
+        );
 
-    if (!req.file && !req.files)
-      return res.status(400).send("Select a file before uploading");
+    if (req.files) {
+      if (!req.files.length) {
+        return res
+          .status(400)
+          .send("Select one or more files before uploading.");
+      }
+    } else if (!req.file)
+      return res.status(400).send("Select a file before uploading.");
 
     if (req.file)
       response = `<div>You have uploaded this picture:</div> <img src=${req.file.filename} />`;
