@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const upload = require("./utils/multer");
 
 const router = express.Router();
@@ -13,13 +14,13 @@ router.get("/", (req, res) => {
 router.post(
   "/upload-profile-pic",
   upload.single("profile_pic"),
-  controllers.uploadPicsAfter
+  controllers.uploadProfilePicAfter
 );
 
 router.post(
   "/upload-cat-pics",
   upload.array("cat_pics"),
-  controllers.uploadPicsAfter
+  controllers.uploadCatPicsAfter
 );
 
 module.exports = router;
