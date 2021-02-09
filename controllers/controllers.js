@@ -1,4 +1,4 @@
-const db = require("./db.js");
+const db = require("../utils/db.js");
 
 const { UPLOADS } = process.env;
 

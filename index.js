@@ -15,7 +15,7 @@ const app = express();
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const routes = require("./routes");
+const routes = require("./routes/routes");
 app.use("/", routes);
 
 app.use(express.static("uploads"));
