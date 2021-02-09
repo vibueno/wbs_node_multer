@@ -1,9 +1,14 @@
 const express = require("express");
-const path = require("path");
 const upload = require("./utils/multer");
 
 const router = express.Router();
 const controllers = require("./controllers");
+
+router.get("/get-pics", controllers.getAllPics);
+
+router.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"));
+});
 
 router.post(
   "/upload-profile-pic",
@@ -16,9 +21,5 @@ router.post(
   upload.array("cat_pics"),
   controllers.uploadPicsAfter
 );
-
-router.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "index.html"));
-});
 
 module.exports = router;

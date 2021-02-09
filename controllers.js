@@ -1,6 +1,23 @@
-const runQuery = require("./db.js");
+const db = require("./db.js");
+
+const { UPLOADS } = process.env;
 
 const pictureController = {
+  getAllPics: async (req, res) => {
+    let response = "";
+
+    const query = {
+      text: "SELECT name FROM pictures",
+    };
+
+    const picturesData = await db.query(query);
+
+    picturesData.rows.forEach((picture) => {
+      response += `<div><a href="${picture.name}">${picture.name}</a></div>`;
+    });
+    return res.status(200).send(response);
+  },
+
   uploadPicsAfter: async (req, res) => {
     const insertPictureSQL =
       "INSERT INTO pictures (name, originalname) VALUES ";
