@@ -23,26 +23,18 @@ const pictureController = {
       "INSERT INTO pictures (name, originalname) VALUES ";
     let response;
 
-    if (req.badExtension)
-      return res
-        .status(400)
-        .send(
-          "The file you tried to upload has an extension that is not allowed"
-        );
-
-    if (!req.file) {
+    if (!req.file)
       return res.status(400).send("Select a file before uploading.");
 
-      const querySQL = insertPictureSQL + "($1,$2);";
+    const querySQL = insertPictureSQL + "($1,$2);";
 
-      const query = {
-        text: querySQL,
-        values: [req.file.filename, req.file.originalname],
-      };
+    const query = {
+      text: querySQL,
+      values: [req.file.filename, req.file.originalname],
+    };
 
-      const data = await db.query(query);
-      response = `<div>You have uploaded this picture:</div> <img src=${req.file.filename} />`;
-    }
+    const data = await db.query(query);
+    response = `<div>You have uploaded this picture:</div> <img src=${req.file.filename} />`;
 
     return res.status(200).send(response);
   },
@@ -51,13 +43,6 @@ const pictureController = {
     const insertPictureSQL =
       "INSERT INTO pictures (name, originalname) VALUES ";
     let response;
-
-    if (req.badExtension)
-      return res
-        .status(400)
-        .send(
-          "One of the files you tried to upload has an extension that is not allowed. All other files have been uploaded."
-        );
 
     if (req.files)
       if (!req.files.length)

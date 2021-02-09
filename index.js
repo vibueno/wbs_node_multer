@@ -1,8 +1,11 @@
 // Dotenv config
 
 const dotenv = require("dotenv");
+
 dotenv.config();
 const { PORT } = process.env;
+
+const errorHandler = require("./utils/errorHandler");
 
 // Express config
 
@@ -16,6 +19,8 @@ const routes = require("./routes");
 app.use("/", routes);
 
 app.use(express.static("uploads"));
+
+app.use(errorHandler);
 
 //Start server
 

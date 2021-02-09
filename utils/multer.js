@@ -20,10 +20,16 @@ const upload = multer({
   fileFilter: (req, file, cb) => {
     const allowedFiletypes = [".png", ".jpg", ".jpeg", ".gif", ".webp"];
 
-    if (!allowedFiletypes.includes(path.extname(file.originalname))) {
-      req.badExtension = true;
-      return cb(null, false);
-    } else cb(null, true);
+    if (
+      !allowedFiletypes.includes(path.extname(file.originalname.toLowerCase()))
+    ) {
+      cb(
+        new multer.MulterError("LIMIT_UNEXPECTED_FILE", "Invalid file"),
+        false
+      );
+    } else {
+      cb(null, true);
+    }
   },
 });
 
