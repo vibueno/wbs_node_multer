@@ -1,6 +1,9 @@
 const db = require("../utils/db.js");
+const format = require("pg-format");
 
 const { UPLOADS } = process.env;
+
+const insertPictureSQL = "INSERT INTO pictures (name, originalname) VALUES ";
 
 const pictureController = {
   getAllPics: async (req, res) => {
@@ -19,10 +22,6 @@ const pictureController = {
   },
 
   uploadProfilePicAfter: async (req, res) => {
-    const insertPictureSQL =
-      "INSERT INTO pictures (name, originalname) VALUES ";
-    let response;
-
     if (!req.file)
       return res.status(400).send("Select a file before uploading.");
 
@@ -34,41 +33,30 @@ const pictureController = {
     };
 
     const data = await db.query(query);
-    response = `<div>You have uploaded this picture:</div> <img src=${req.file.filename} />`;
+    const response = `<div>You have uploaded this picture:</div> <img src=${req.file.filename} />`;
 
     return res.status(200).send(response);
   },
 
   uploadCatPicsAfter: async (req, res) => {
-    const insertPictureSQL =
-      "INSERT INTO pictures (name, originalname) VALUES ";
-    let response;
-
     if (req.files)
       if (!req.files.length)
         return res
           .status(400)
           .send("Select one or more files before uploading.");
 
-    response = "<div>You have uploaded these pictures:</div>";
-    let querySQL = insertPictureSQL;
-    let values = [];
+    let response = "<div>You have uploaded these pictures:</div>";
+    const values = [];
 
     req.files.forEach((file, index) => {
+      values.push([file.filename, file.originalname]);
       response += `<img src="${file.filename}" />`;
-      querySQL += `(${"$" + (2 * index + 1) + "::text"},${
-        "$" + (2 * index + 2) + "::text"
-      }),`;
-      values.push(file.filename);
-      values.push(file.originalname);
     });
 
-    querySQL = querySQL.slice(0, -1);
-    querySQL += ";";
+    const querySQL = format(insertPictureSQL + "%L", values);
 
     const query = {
       text: querySQL,
-      values: values,
     };
 
     const data = await db.query(query);
